@@ -1,7 +1,8 @@
+import 'package:absensi/ui/reports/reports_screen.dart';
+import 'package:flutter/material.dart';
 import 'package:absensi/ui/absent/absent_screen.dart';
 import 'package:absensi/ui/attedance%20history/attedance_history.dart';
 import 'package:absensi/ui/attend/attend_screen.dart';
-import 'package:flutter/material.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -35,7 +36,6 @@ class HomeScreen extends StatelessWidget {
             child: Column(
               children: [
                 Expanded(
-                  // efect when click
                   child: InkWell(
                     highlightColor: Colors.transparent,
                     splashColor: Colors.transparent,
@@ -101,7 +101,8 @@ class HomeScreen extends StatelessWidget {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const AttendanceHistoryScreen()));
+                              builder: (context) =>
+                                  const AttendanceHistoryScreen()));
                     },
                     child: const Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -113,6 +114,37 @@ class HomeScreen extends StatelessWidget {
                         ),
                         Text(
                           "Attendance History",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                // New Reports Button
+                Expanded(
+                  child: InkWell(
+                    highlightColor: Colors.transparent,
+                    splashColor: Colors.transparent,
+                    onTap: () {
+                      // Navigate to the Reports screen
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const ReportInputScreen())); // Updated navigation
+                    },
+                    child: const Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.bar_chart,
+                          size: 100,
+                          color: Colors.blueAccent,
+                        ),
+                        Text(
+                          "Reports",
                           style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.bold,

@@ -34,7 +34,7 @@ class _AbsentScreenState extends State<AbsentScreen> {
     super.initState();
   }
 
-  //show progress dialog
+  // Show progress dialog
   showLoaderDialog(BuildContext context) {
     AlertDialog alert = AlertDialog(
       content: Row(
@@ -57,10 +57,9 @@ class _AbsentScreenState extends State<AbsentScreen> {
     );
   }
 
-  //submit data absent to firebase
+  // Submit data absent to Firebase
   Future<void> submitAbsen(
       String nama, String keterangan, String from, String until) async {
-    // Validasi input sebelum mengirim ke Firebase
     if (nama.isEmpty ||
         keterangan == "Please Choose:" ||
         from.isEmpty ||
@@ -80,7 +79,6 @@ class _AbsentScreenState extends State<AbsentScreen> {
       return;
     }
 
-    // Menampilkan loader
     showLoaderDialog(context);
 
     try {
@@ -89,10 +87,9 @@ class _AbsentScreenState extends State<AbsentScreen> {
         'name': nama,
         'description': keterangan,
         'datetime': '$from - $until',
-        'created_at': FieldValue.serverTimestamp(), // Tambahkan timestamp
+        'created_at': FieldValue.serverTimestamp(),
       });
 
-      // Tutup loader sebelum menampilkan pesan sukses
       Navigator.of(context).pop();
 
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -108,11 +105,9 @@ class _AbsentScreenState extends State<AbsentScreen> {
         behavior: SnackBarBehavior.floating,
       ));
 
-      // Kembali ke halaman utama
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => HomeScreen()));
     } catch (e) {
-      // Jika terjadi error, tutup loader
       Navigator.of(context).pop();
 
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -172,13 +167,9 @@ class _AbsentScreenState extends State<AbsentScreen> {
                   ),
                   child: const Row(
                     children: [
-                      SizedBox(
-                        width: 12,
-                      ),
+                      SizedBox(width: 12),
                       Icon(Icons.maps_home_work_outlined, color: Colors.white),
-                      SizedBox(
-                        width: 12,
-                      ),
+                      SizedBox(width: 12),
                       Text(
                         "Please Fill out the Form!",
                         style: TextStyle(
@@ -396,67 +387,105 @@ class _AbsentScreenState extends State<AbsentScreen> {
                   ]),
                 ),
                 Container(
-                    alignment: Alignment.center,
-                    margin: const EdgeInsets.all(30),
-                    child: Material(
-                      elevation: 3,
-                      borderRadius: BorderRadius.circular(20),
-                      child: Container(
-                        width: size.width,
-                        height: 50,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            color: Colors.white),
-                        child: Material(
+                  alignment: Alignment.center,
+                  margin: const EdgeInsets.all(30),
+                  child: Material(
+                    elevation: 3,
+                    borderRadius: BorderRadius.circular(20),
+                    child: Container(
+                      width: size.width,
+                      height: 50,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: Colors.white,
+                      ),
+                      child: Material(
+                        borderRadius: BorderRadius.circular(20),
+                        color: Colors.blueAccent,
+                        child: InkWell(
+                          splashColor: Colors.blue,
                           borderRadius: BorderRadius.circular(20),
-                          color: Colors.blueAccent,
-                          child: InkWell(
-                            splashColor: Colors.blue,
-                            borderRadius: BorderRadius.circular(20),
-                            onTap: () {
-                              if (controllerName.text.isEmpty ||
-                                  dropValueCategories == "Please Choose:" ||
-                                  fromController.text.isEmpty ||
-                                  toController.text.isEmpty) {
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(const SnackBar(
-                                  content: Row(
-                                    children: [
-                                      Icon(
-                                        Icons.info_outline,
-                                        color: Colors.white,
-                                      ),
-                                      SizedBox(width: 10),
-                                      Text(
-                                        "Ups, please fill the form!",
-                                        style: TextStyle(color: Colors.white),
-                                      )
-                                    ],
-                                  ),
-                                  backgroundColor: Colors.blueAccent,
-                                  shape: StadiumBorder(),
-                                  behavior: SnackBarBehavior.floating,
-                                ));
-                              } else {
-                                submitAbsen(
-                                    controllerName.text.toString(),
-                                    dropValueCategories.toString(),
-                                    fromController.text,
-                                    toController.text);
-                              }
-                            },
-                            child: const Center(
-                              child: Text(
-                                "Make a Request",
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold),
-                              ),
+                          onTap: () {
+                            if (controllerName.text.isEmpty ||
+                                dropValueCategories == "Please Choose:" ||
+                                fromController.text.isEmpty ||
+                                toController.text.isEmpty) {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(const SnackBar(
+                                content: Row(
+                                  children: [
+                                    Icon(
+                                      Icons.info_outline,
+                                      color: Colors.white,
+                                    ),
+                                    SizedBox(width: 10),
+                                    Text(
+                                      "Ups, please fill the form!",
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                  ],
+                                ),
+                                backgroundColor: Colors.blueAccent,
+                                shape: StadiumBorder(),
+                                behavior: SnackBarBehavior.floating,
+                              ));
+                            } else {
+                              submitAbsen(
+                                  controllerName.text.toString(),
+                                  dropValueCategories.toString(),
+                                  fromController.text,
+                                  toController.text);
+                            }
+                          },
+                          child: const Center(
+                            child: Text(
+                              "Make a Request",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
                             ),
                           ),
                         ),
                       ),
-                    )),
+                    ),
+                  ),
+                ),
+                // Cancel Button
+                Container(
+                  alignment: Alignment.center,
+                  margin: const EdgeInsets.all(30),
+                  child: Material(
+                    elevation: 3,
+                    borderRadius: BorderRadius.circular(20),
+                    child: Container(
+                      width: size.width,
+                      height: 50,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: Colors.white,
+                      ),
+                      child: Material(
+                        borderRadius: BorderRadius.circular(20),
+                        color: Colors.redAccent,
+                        child: InkWell(
+                          splashColor: Colors.blue,
+                          borderRadius: BorderRadius.circular(20),
+                          onTap: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: const Center(
+                            child: Text(
+                              "Cancel",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
               ],
             )),
       ),
