@@ -19,7 +19,6 @@ class _ReportInputScreenState extends State<ReportInputScreen> {
 
   bool _isLoading = false;
 
-  // Function to check if all fields are filled
   bool _areFieldsFilled() {
     return _field1Controller.text.isNotEmpty &&
         _field2Controller.text.isNotEmpty &&
@@ -30,16 +29,14 @@ class _ReportInputScreenState extends State<ReportInputScreen> {
         _field7Controller.text.isNotEmpty;
   }
 
-  // Function to submit data to Firebase Firestore
   Future<void> _submitReport() async {
     if (_areFieldsFilled()) {
       setState(() {
-        _isLoading = true; // Set loading to true while submitting
+        _isLoading = true;
       });
 
       try {
-        // Add data to Firestore
-        await FirebaseFirestore.instance.collection('reports').add({
+        await FirebaseFirestore.instance.collection('reports_history').add({
           'date': _field1Controller.text,
           'category': _field2Controller.text,
           'location': _field3Controller.text,
@@ -47,9 +44,9 @@ class _ReportInputScreenState extends State<ReportInputScreen> {
           'report_type': _field5Controller.text,
           'status': _field6Controller.text,
           'remarks': _field7Controller.text,
+          'timestamp': FieldValue.serverTimestamp(),
         });
 
-        // Navigate back to the home screen and show a success message
         Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
@@ -58,7 +55,6 @@ class _ReportInputScreenState extends State<ReportInputScreen> {
           ),
         );
       } catch (e) {
-        // Handle error during submission
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text("Error submitting the report. Please try again."),
@@ -67,11 +63,10 @@ class _ReportInputScreenState extends State<ReportInputScreen> {
         );
       } finally {
         setState(() {
-          _isLoading = false; // Set loading to false after submission
+          _isLoading = false;
         });
       }
     } else {
-      // Show error if fields are not filled
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text("Please fill all fields."),
@@ -88,7 +83,6 @@ class _ReportInputScreenState extends State<ReportInputScreen> {
         backgroundColor: Colors.blueAccent,
         title: const Text("Report Input"),
         centerTitle: true,
-        elevation: 5,
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -98,15 +92,9 @@ class _ReportInputScreenState extends State<ReportInputScreen> {
             children: [
               const Text(
                 "Enter Report Details",
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.blueAccent,
-                ),
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.blueAccent),
               ),
               const SizedBox(height: 30),
-
-              // Input Fields (7 Fields)
               _buildTextField("Enter the date of the report", _field1Controller),
               _buildTextField("Select the category of the report", _field2Controller),
               _buildTextField("Specify the location of the incident", _field3Controller),
@@ -115,26 +103,17 @@ class _ReportInputScreenState extends State<ReportInputScreen> {
               _buildTextField("State the current status", _field6Controller),
               _buildTextField("Add any additional remarks", _field7Controller),
               const SizedBox(height: 30),
-
-              // Submit Button
               Center(
                 child: ElevatedButton(
-                  onPressed: _isLoading || !_areFieldsFilled() ? null : _submitReport, // Prevent multiple submissions
+                  onPressed: _isLoading || !_areFieldsFilled() ? null : _submitReport,
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
                     backgroundColor: Colors.blueAccent,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
-                    ),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
                   ),
                   child: _isLoading
-                      ? const CircularProgressIndicator(
-                          color: Colors.white,
-                        ) // Show loading indicator
-                      : const Text(
-                          "Submit Report",
-                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                        ),
+                      ? const CircularProgressIndicator(color: Colors.white)
+                      : const Text("Submit Report", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                 ),
               ),
             ],
@@ -151,19 +130,7 @@ class _ReportInputScreenState extends State<ReportInputScreen> {
         controller: controller,
         decoration: InputDecoration(
           labelText: labelText,
-          labelStyle: const TextStyle(
-            color: Colors.blueAccent,
-            fontSize: 14,
-            fontWeight: FontWeight.w500,
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(15),
-            borderSide: const BorderSide(color: Colors.blueAccent),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(15),
-            borderSide: const BorderSide(color: Colors.blueAccent),
-          ),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
           contentPadding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
         ),
         onChanged: (value) => setState(() {}),
